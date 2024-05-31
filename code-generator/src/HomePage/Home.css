@@ -1,0 +1,38 @@
+#header{
+    border-radius: 0;
+}
+
+#resource-menu{
+    background: white;
+}
+
+.Intro {
+    display: flex; /* Make the intro container a flexbox for better layout */
+    align-items: center; /* Align the content inside the intro container vertically */
+    justify-content: space-between; /* Distribute the content horizontally with space in between */
+    padding: 2rem; /* Add some padding inside the intro container */
+    margin: 0;
+    padding: 0;
+    background: white;
+    height: 548px;
+  }
+  
+  .Intro h1 {
+    font-size: 3rem; /* Set the font size for the heading */
+    font-weight: 600;
+    margin-right: 3rem;
+  }
+  
+  .Intro p {
+    font-size: 2rem; /* Set the font size for the paragraph */
+    margin-right: 3rem;
+    margin-bottom: 2rem; /* Add some margin below the paragraph */
+  }
+  
+  .Intro img {
+    width: 50%; /* Set the width of the image */
+    height: auto; /* Maintain the aspect ratio of the image */
+  }
+
+  
+  
