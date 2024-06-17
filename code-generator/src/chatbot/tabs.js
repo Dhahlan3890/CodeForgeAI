@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Textarea, Button, IconButton, Spinner } from "@material-tailwind/react";
+import HtmlRenderer from './HtmlRenderer';
+import { DragDropContext } from 'react-beautiful-dnd';
 import {
   Tabs,
   TabsHeader,
@@ -20,6 +22,16 @@ function CodeTab({ result1 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (result1 !== null) {
+      setResult(result1);
+    }
+  }, [result1]);
+
+  const modifyResult = (data) => {
+    setResult(data);
+  };
+
   const handleTextChange = (event) => {
     setText(event.target.value);
   };
@@ -34,14 +46,18 @@ function CodeTab({ result1 }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ result, text: "\nmodify the code to " + text }),
+        body: JSON.stringify({ text: `Code:\n${result}\n\n\nTask : modify the code to ${text} and give the full modified code. Do not change the structure of code.` }),
       });
 
       const data = await response.json();
       if (response.ok) {
         modifyResult(data.result);
-      } else {
-        setError(data.msg || 'Error analyzing text');
+      //   if (data.result !== 'No HTML content found'){
+      //     modifyResult(data.result);
+      //   }
+        
+      // } else {
+      //   setError(data.msg || 'Error analyzing text');
       }
     } catch (err) {
       setError('Something went wrong!');
@@ -51,15 +67,23 @@ function CodeTab({ result1 }) {
   };
 
   // Use useEffect to update result when result1 changes
-  useEffect(() => {
-    if (result1 !== null) {
-      setResult(result1);
-    }
-  }, [result1]);
 
-  const modifyResult = (data) => {
-    setResult(data);
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const elements = Array.from(document.querySelectorAll('.embedded-html > *'));
+    const [removed] = elements.splice(result.source.index, 1);
+    elements.splice(result.destination.index, 0, removed);
+
+    const updatedHtmlContent = elements.map(el => el.outerHTML).join('');
+    setResult(`<html><body>${updatedHtmlContent}</body></html>`);
   };
+
+  const handleHtmlChange = (updatedHtml) => {
+    setResult(updatedHtml);
+  };
+
+  
 
   const data = [
     {
@@ -114,7 +138,11 @@ function CodeTab({ result1 }) {
               {error && <div className="text-red-500">{error}</div>}
             </div>
             </form>
-          <EmbeddedHtml htmlContent={result} />
+            <DragDropContext onDragEnd={onDragEnd}>
+            <EmbeddedHtml htmlContent={result} />
+          </DragDropContext>
+          {/* <EmbeddedHtml htmlContent={result} /> */}
+          {/* <HtmlRenderer generatedHtml={result} /> */}
         </div>
       ),
     },

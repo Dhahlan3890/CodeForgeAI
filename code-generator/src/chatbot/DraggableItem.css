@@ -1,0 +1,11 @@
+.draggable {
+    cursor: move;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .draggable[contenteditable="true"] {
+    outline: 1px dashed #000;
+  }
+  

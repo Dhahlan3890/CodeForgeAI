@@ -1,15 +1,27 @@
-import React from 'react';
 
-function EmbeddedHtml({ htmlContent }) {
-  // Check if htmlContent is not null or undefined
-  const contentWithoutHtmlTags = htmlContent;
+
+import React, { useEffect, useRef } from 'react';
+
+const EmbeddedHtml = ({ htmlContent }) => {
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    const iframeDoc = iframeRef.current.contentDocument || iframeRef.current.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(htmlContent);
+    iframeDoc.close();
+  }, [htmlContent]);
 
   return (
-    <div>
-      {/* Inject HTML content */}
-      <div dangerouslySetInnerHTML={{ __html: contentWithoutHtmlTags }} />
-    </div>
+    <iframe
+      ref={iframeRef}
+      title="Html Content"
+      width="100%"
+      height="500px"
+      style={{ border: '1px solid #ccc', marginTop: '20px', borderRadius: '20px'}}
+    />
   );
-}
+};
 
 export default EmbeddedHtml;
+

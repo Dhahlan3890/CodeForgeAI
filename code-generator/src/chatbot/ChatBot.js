@@ -1,37 +1,37 @@
-import './chatbot.css'
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import SideBar from "./SideBar";
+import AuthService from '../authService';
+import SideBar from './SideBar';
 import Chat from './chat';
 import CodeTab from './tabs';
-import React, { useState } from 'react';
-import AuthService from '../authService';
-import { ChatTextarea } from './chat-input';
 
 function ChatBot() {
   const [result, setResult] = useState(null);
+  const [history, setHistory] = useState([]);
+  const location = useLocation();
 
   const handleResult = (data) => {
     setResult(data);
   };
-  const location = useLocation();
+
+  const handleHistory = (data) => {
+    setHistory((prevHistory) => [...prevHistory, data]);
+  };
 
   useEffect(() => {
     if (!location.pathname.startsWith('/dashboard')) {
       AuthService.logout();
     }
   }, [location]);
+
   return (
     <div className='chatbot'>
-      <SideBar />
+      <SideBar history_store={history} />
       <div className='code-area'>
-        <Chat onSubmit={handleResult}/>
-        <CodeTab result1={result}/>
+        <Chat onSubmit={handleResult} onHistory={handleHistory} />
+        <CodeTab result1={result} />
       </div>
-      
     </div>
-      
-    
   );
 }
 

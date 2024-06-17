@@ -2,189 +2,18 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import {
   Navbar,
-  Collapse,
+  MobileNav,
   Typography,
   Button,
   IconButton,
-  List,
-  ListItem,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
+  Card,
 } from "@material-tailwind/react";
-import {
-  ChevronDownIcon,
-  Bars3Icon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  Bars4Icon,
-  GlobeAmericasIcon,
-  NewspaperIcon,
-  PhoneIcon,
-  RectangleGroupIcon,
-  SquaresPlusIcon,
-  SunIcon,
-  TagIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/solid";
- 
-const navListMenuItems = [
-  {
-    title: "Products",
-    description: "Find the perfect solution for your needs.",
-    icon: SquaresPlusIcon,
-  },
-  {
-    title: "About Us",
-    description: "Meet and learn about our dedication",
-    icon: UserGroupIcon,
-  },
-  {
-    title: "Blog",
-    description: "Find the perfect solution for your needs.",
-    icon: Bars4Icon,
-  },
-  {
-    title: "Services",
-    description: "Learn how we can help you achieve your goals.",
-    icon: SunIcon,
-  },
-  {
-    title: "Support",
-    description: "Reach out to us for assistance or inquiries",
-    icon: GlobeAmericasIcon,
-  },
-  {
-    title: "Contact",
-    description: "Find the perfect solution for your needs.",
-    icon: PhoneIcon,
-  },
-  {
-    title: "News",
-    description: "Read insightful articles, tips, and expert opinions.",
-    icon: NewspaperIcon,
-  },
-  {
-    title: "Products",
-    description: "Find the perfect solution for your needs.",
-    icon: RectangleGroupIcon,
-  },
-  {
-    title: "Special Offers",
-    description: "Explore limited-time deals and bundles",
-    icon: TagIcon,
-  },
-];
- 
-function NavListMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const renderItems = navListMenuItems.map(
-    ({ icon, title, description }, key) => (
-      <a href="#" key={key}>
-        <MenuItem className="flex items-center gap-3 rounded-lg">
-          <div className="flex items-center justify-center rounded-lg !bg-blue-gray-50 p-2 ">
-            {" "}
-            {React.createElement(icon, {
-              strokeWidth: 2,
-              className: "h-6 text-gray-900 w-6",
-            })}
-          </div>
-          <div>
-            <Typography
-              variant="h6"
-              color="blue-gray"
-              className="flex items-center text-sm font-bold"
-            >
-              {title}
-            </Typography>
-            <Typography
-              variant="paragraph"
-              className="text-xs !font-medium text-blue-gray-500"
-            >
-              {description}
-            </Typography>
-          </div>
-        </MenuItem>
-      </a>
-    ),
-  );
- 
-  return (
-    <React.Fragment>
-      <Menu 
-        open={isMenuOpen}
-        handler={setIsMenuOpen}
-        offset={{ mainAxis: 20 }}
-        placement="bottom"
-        allowHover={true}
-      >
-        <MenuHandler >
-          <Typography as="div" variant="small" className="font-medium" color="white">
-            <ListItem 
-              className="flex items-center gap-2 py-2 pr-4 font-medium text-white-900"
-              color="white"
-              selected={isMenuOpen || isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen((cur) => !cur)}
-            >
-              Resources
-              <ChevronDownIcon
-                strokeWidth={2.5}
-                className={`hidden h-3 w-3 transition-transform lg:block ${
-                  isMenuOpen ? "rotate-180" : ""
-                }`}
-              />
-              <ChevronDownIcon
-                strokeWidth={2.5}
-                className={`block h-3 w-3 transition-transform lg:hidden ${
-                  isMobileMenuOpen ? "rotate-180" : ""
-                }`}
-              />
-            </ListItem>
-          </Typography>
-        </MenuHandler>
-        <MenuList  className="hidden max-w-screen-xl rounded-xl lg:block">
-          <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
-            {renderItems}
-          </ul>
-        </MenuList>
-      </Menu>
-      <div  className="block lg:hidden">
-        <Collapse open={isMobileMenuOpen}>{renderItems}</Collapse>
-      </div>
-    </React.Fragment>
-  );
-}
- 
-function NavList() {
-  return (
-    <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-      <Typography
-        as="a"
-        href="#"
-        variant="small"
-        color="white"
-        className="font-medium"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">Home</ListItem>
-      </Typography>
-      <NavListMenu />
-      <Typography
-        as="a"
-        href="#"
-        variant="small"
-        color="white"
-        className="font-medium"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
-          Contact Us
-        </ListItem>
-      </Typography>
-    </List>
-  );
-}
+import CarouselTansition from './cards'
+import CarouselTransition from "./cards";
+import Footer from "./Footer";
+import WhyCode from "./Why_code";
+import Inspire from "./inspire";
+import LogoAi from "./assets/logo_web_ai.png"
  
 function Header() {
   const [openNav, setOpenNav] = React.useState(false);
@@ -206,54 +35,141 @@ function Header() {
     navigate('/signup'); // Navigate to the About page
   };
  
-  return (
-    <Navbar id="header" variant="gradient" color="blue-gray" className="mx-auto max-w-screen-3xl from-blue-900 to-blue-white-800 px-4 py-3">
-      <div className="flex items-center justify-between text-blue-white-900">
-        <Typography
-          as="a"
-          href="#"
-          variant="h6"
-          color="white"
-          className="mr-4 cursor-pointer py-1.5 lg:ml-2"
-        >
+  const navList = (
+    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="#whycode" className="flex items-center">
+          Benifits
+        </a>
+      </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="#inspire" className="flex items-center">
           CodeForgeAI
-        </Typography>
-        <div className="hidden lg:block">
-          <NavList />
+        </a>
+      </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="#footer" className="flex items-center">
+          Contact Us
+        </a>
+      </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="https://ai.google.dev/gemini-api/docs" className="flex items-center">
+          Docs
+        </a>
+      </Typography>
+    </ul>
+  );
+ 
+  return (
+    <div className="-m-0 max-h-[768px] w-[calc(100%)] ">
+      <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4" id="header">
+      <img src={LogoAi} alt="nature" id="logo-header" />
+        <div className="flex items-center justify-between text-blue-gray-900">
+          <div></div>
+          <div className="flex items-center gap-4">
+            <div className="mr-4 hidden lg:block">{navList}</div>
+            <div className="flex items-center gap-x-1">
+              <Button
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block"
+                onClick={LoginClick}
+              >
+                <span>Log In</span>
+              </Button>
+              <Button
+                variant="gradient"
+                size="sm"
+                className="hidden lg:inline-block"
+                onClick={SignUpClick}
+              >
+                <span>Sign up</span>
+              </Button>
+            </div>
+            <IconButton
+              variant="text"
+              className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+              ripple={false}
+              onClick={() => setOpenNav(!openNav)}
+            >
+              {openNav ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </IconButton>
+          </div>
         </div>
-        <div className="hidden gap-2 lg:flex">
-          <Button variant="text" size="sm" color="white" onClick={LoginClick}>
-            Log In
-          </Button>
-          <Button variant="gradient" size="sm" color="white" onClick={SignUpClick}>
-            Sign Up
-          </Button>
-        </div>
-        <IconButton
-          variant="text"
-          color="blue-gray"
-          className="lg:hidden"
-          onClick={() => setOpenNav(!openNav)}
-        >
-          {openNav ? (
-            <XMarkIcon className="h-6 w-6" strokeWidth={2} />
-          ) : (
-            <Bars3Icon className="h-6 w-6" strokeWidth={2} />
-          )}
-        </IconButton>
+        <MobileNav open={openNav}>
+          {navList}
+          <div className="flex items-center gap-x-1">
+            <Button fullWidth variant="text" size="sm" className="" onClick={LoginClick}>
+              <span>Log In</span>
+            </Button>
+            <Button fullWidth variant="gradient" size="sm" className="" onClick={SignUpClick}>
+              <span>Sign up</span>
+            </Button>
+          </div>
+        </MobileNav>
+      </Navbar>
+      <div className="mx-auto max-w-[calc(100%-4rem)] py-12 mb-12 overflow-hidden">
+        <CarouselTransition />
       </div>
-      <Collapse open={openNav}>
-        <NavList />
-        <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-          <Button variant="outlined" size="sm" color="white" fullWidth onClick={LoginClick}>
-            Log In
-          </Button>
-          <Button variant="gradient" size="sm" color="white" fullWidth onClick={SignUpClick}>
-            Sign Up
-          </Button>
-        </div>
-      </Collapse>
-    </Navbar>
+      <div id="whycode">
+        <WhyCode />
+      </div>
+      <div id="inspire">
+      <Inspire />
+      </div>
+      <div id="footer">
+      <Footer />
+      </div>
+    </div>
   );
 }
 

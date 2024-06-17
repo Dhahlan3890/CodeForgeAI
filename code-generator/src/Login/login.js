@@ -1,11 +1,21 @@
-// src/Login/login.js
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Typography, Input, Button } from "@material-tailwind/react";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Message from './Message';
 import AuthService from '../authService';
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Typography,
+  Input,
+  Checkbox,
+  Button,
+} from "@material-tailwind/react";
+import './login-signup.css';
 
-export function Login() {
+function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,106 +32,96 @@ export function Login() {
     }
   };
 
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    const { credential } = credentialResponse;
+    try {
+      const response = await fetch('http://localhost:8000/api/google-login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: credential }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        AuthService.saveToken(data.token); // save token in AuthService
+        navigate('/chatbot');
+      } else {
+        setMessage(data.msg);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage('Something went wrong!');
+    }
+  };
+
+  const handleGoogleLoginFailure = (error) => {
+    console.log('Google login failure:', error);
+    setMessage('Google login failed. Please try again.');
+  };
+
   return (
-    <section id="signup-card" className="grid text-center h-screen items-center p-8">
-      <div>
-        <Typography variant="h3" color="blue-gray" className="mb-2">
-          Sign In
-        </Typography>
-        <Typography className="mb-16 text-gray-600 font-normal text-[18px]">
-          Enter your email and password to sign in
-        </Typography>
-        <form action="#" className="mx-auto max-w-[24rem] text-left" onSubmit={handleSubmit}>
-          {message && <Message message={message} />}
-          <div className="mb-6">
-            <label htmlFor="email">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-gray-900"
-              >
-                Your Email
-              </Typography>
-            </label>
-            <Input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              color="gray"
-              size="lg"
-              name="email"
-              placeholder="name@mail.com"
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-              labelProps={{
-                className: "hidden",
-              }}
-            />
-          </div>
-          <div className="mb-6">
-            <label htmlFor="password">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-gray-900"
-              >
-                Password
-              </Typography>
-            </label>
-            <Input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              size="lg"
-              placeholder="********"
-              labelProps={{
-                className: "hidden",
-              }}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-              type="password"
-              id="password"
-              required
-            />
-          </div>
-          <Button color="gray" size="lg" className="mt-6" fullWidth type="submit">
-            sign in
-          </Button>
-          <div className="mt-4 flex justify-end">
-            <Typography
-              as="a"
-              href="#"
-              color="blue-gray"
-              variant="small"
-              className="font-medium"
-            >
-              Forgot password
-            </Typography>
-          </div>
-          <Button
-            variant="outlined"
-            size="lg"
-            className="mt-6 flex h-12 items-center justify-center gap-2"
-            fullWidth
-          >
-            <img
-              src={`https://www.material-tailwind.com/logos/logo-google.png`}
-              alt="google"
-              className="h-6 w-6"
-            />{" "}
-            sign in with google
-          </Button>
-          <Typography
-            variant="small"
+    <GoogleOAuthProvider clientId="762258283337-qg5rlsln6kjmmj0r74nt10qbro8kj0rg.apps.googleusercontent.com">
+      <form action="#" className="mx-auto max-w-[24rem] text-left" onSubmit={handleSubmit} id="card">
+        <Card className="w-96">
+          <CardHeader
+            variant="gradient"
             color="gray"
-            className="mt-4 text-center font-normal"
+            className="mb-4 grid h-28 place-items-center"
           >
-            Not registered?{" "}
-            <a href="#" className="font-medium text-gray-900" onClick={() => navigate('/signup')}>
-              Create account
-            </a>
-          </Typography>
-        </form>
-        
-      </div>
-    </section>
+            <Typography variant="h3" color="white">
+              Sign In
+            </Typography>
+          </CardHeader>
+          <CardBody className="flex flex-col gap-4">
+            <Input label="Email" size="lg" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input label="Password" size="lg" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <div className="-ml-2.5">
+              <Checkbox label="Remember Me" />
+            </div>
+          </CardBody>
+          <CardFooter className="pt-0 flex flex-col gap-4">
+            {message && <Message message={message} />}
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onFailure={handleGoogleLoginFailure}
+              render={(renderProps) => (
+                <Button
+                  variant="outlined"
+                  size="lg"
+                  className="mt-6 flex h-12 items-center justify-center gap-2"
+                  fullWidth
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                >
+                  <img
+                    src={`https://www.material-tailwind.com/logos/logo-google.png`}
+                    alt="google"
+                    className="h-6 w-6"
+                  />{" "}
+                  Sign in with Google
+                </Button>
+              )}
+            />
+            <Button variant="gradient" fullWidth type="submit">
+              Sign In
+            </Button>
+            <Typography variant="small" className="mt-6 flex justify-center">
+              Don&apos;t have an account?
+              <Typography
+                as="a"
+                href="#signup"
+                variant="small"
+                color="blue-gray"
+                className="ml-1 font-bold"
+                onClick={() => navigate('/signup')}
+              >
+                Sign up
+              </Typography>
+            </Typography>
+          </CardFooter>
+        </Card>
+      </form>
+    </GoogleOAuthProvider>
   );
 }
 

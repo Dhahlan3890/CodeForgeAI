@@ -14,9 +14,49 @@ import tempfile
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 import re
+from .genini import chat, image_prompt
+from rest_framework import status
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import logging
 
-client = Client("https://huggingfacem4-screenshot2html.hf.space/--replicas/9yh0v/")
-client1 = Client("Qwen/CodeQwen1.5-7b-Chat-demo")
+
+logger = logging.getLogger(__name__)
+
+class GoogleLoginView(APIView):
+    def post(self, request):
+        token = request.data.get('token')
+        if not token:
+            return Response({'msg': 'No token provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Verify the token with Google
+            id_info = id_token.verify_oauth2_token(token, requests.Request(), settings.GOOGLE_CLIENT_ID)
+            email = id_info.get('email')
+            name = id_info.get('name')
+
+            # Check if the user exists, if not, create a new one
+            user, created = User.objects.get_or_create(email=email, defaults={'name': name})
+            if created:
+                user.set_unusable_password()  # Optional: make sure the user can't log in with a password
+                user.save()
+
+            # Generate a JWT token for the user
+            jwt_token = jwt.encode({
+                'user_id': user.id,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            }, settings.SECRET_KEY, algorithm='HS256')
+
+            return Response({'token': jwt_token}, status=status.HTTP_200_OK)
+        except ValueError:
+            return Response({'msg': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'msg': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+# client = Client("https://taneemishere-html-code-generation-from-images-wi-2a018d2.hf.space/api/predict")
+# client1 = Client("eswardivi/Phi-3-mini-128k-instruct")
 
 
 
@@ -97,12 +137,14 @@ class AnalyzeView(APIView):
                     temp_file.write(chunk)
                 image_path = temp_file.name
 
-            result = client.predict(image_path, api_name="/model_inference")
+            # result = client.predict(image_path, api_name="/model_inference")
+            result = image_prompt(image_path)
             os.remove(image_path)
 
-            return Response({'result': result[0]}, status=status.HTTP_200_OK)
+            return Response({'result': result}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'msg': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error(f"Error during file processing: {e}", exc_info=True)
+            return Response({'msg': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ModifyAnalyzeView(APIView):
     parser_classes = [JSONParser]
@@ -116,9 +158,12 @@ class ModifyAnalyzeView(APIView):
             return Response({'msg': 'No text input provided'}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            result = client1.predict(query=text_input, history=[], system="""You are a HTML web designer.
-                                     you modify the given code according to the requirement.Give me only modified code.
-                                     Dont give anything than modified code.""", api_name="/model_chat")
+            # result = client1.predict(message=text_input,
+            #                         request=0.8,
+            #                         param_3=True,
+            #                         param_4=1024,
+            #                         api_name="/chat")
+            result = chat(text_input)
             
             # Extract the HTML content from the tuple result
             if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], list) and len(result[1]) > 0 and isinstance(result[1][0], list) and len(result[1][0]) > 1:

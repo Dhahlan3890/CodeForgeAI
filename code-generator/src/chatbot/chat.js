@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Button, Spinner } from "@material-tailwind/react";
 import DragNDrop from './file-upload';
 
-function Chat({ onSubmit }) {
+function Chat({ onSubmit, onHistory }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [history, setHistory] = useState([]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -46,7 +47,9 @@ function Chat({ onSubmit }) {
       const data = await response.json();
       if (response.ok) {
         onSubmit(data.result);
-      } else {
+        onHistory({ image: imagePreview, result: data.result });
+      }
+      else {
         setError(data.msg || 'Error analyzing code');
       }
     } catch (err) {
@@ -55,6 +58,8 @@ function Chat({ onSubmit }) {
       setLoading(false);
     }
   };
+
+  
 
   return (
     <form className='code-input' onSubmit={(e) => { e.preventDefault(); analyzeCode(); }}>
@@ -93,14 +98,18 @@ function Chat({ onSubmit }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
             </button>
+            {error && <p className="error" style={{marginLeft:"20px"}}>{error}</p>}
           </div>
         )}
       </div>
-      {error && <p className="error">{error}</p>}
+      
       <Button type="submit" variant="gradient" disabled={loading}>
         {loading ? <Spinner /> : 'Submit'}
       </Button>
+
+      
     </form>
+    
   );
 }
 
