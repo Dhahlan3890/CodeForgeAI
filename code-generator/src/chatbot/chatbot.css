@@ -69,6 +69,20 @@
     object-position: top;
 }
 
+.settings{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.dark-mode {
+    background-color: #1a202c; /* dark background */
+    color: #a0aec0; /* light text color */
+  }
+
+#tab{
+    border-radius: 10px;
+}
 
 
 

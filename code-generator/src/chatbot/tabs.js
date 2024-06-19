@@ -83,8 +83,6 @@ function CodeTab({ result1 }) {
     setResult(updatedHtml);
   };
 
-  
-
   const data = [
     {
       label: "Codes",
@@ -149,7 +147,7 @@ function CodeTab({ result1 }) {
   ];
 
   return (
-    <Tabs value="dashboard">
+    <Tabs value="dashboard" id="tab">
       <TabsHeader>
         {data.map(({ label, value, icon }) => (
           <Tab key={value} value={value}>
