@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
-from .serializers import UserSerializer
+# from .serializers import UserSerializer, HistorySerializer
 import bcrypt
 import jwt
 import datetime
@@ -19,6 +19,7 @@ from rest_framework import status
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import logging
+# from rest_framework import generics
 
 
 logger = logging.getLogger(__name__)
@@ -55,7 +56,7 @@ class GoogleLoginView(APIView):
 
 
 
-# client = Client("https://taneemishere-html-code-generation-from-images-wi-2a018d2.hf.space/api/predict")
+# 
 # client1 = Client("eswardivi/Phi-3-mini-128k-instruct")
 
 
@@ -139,12 +140,53 @@ class AnalyzeView(APIView):
 
             # result = client.predict(image_path, api_name="/model_inference")
             result = image_prompt(image_path)
+            result = extract_html_content(result)
             os.remove(image_path)
+
+            # history = History.objects.create(
+            #     user=request.user,
+            #     image=file,
+            #     result=result
+            # )
+            # history.save()
 
             return Response({'result': result}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f"Error during file processing: {e}", exc_info=True)
             return Response({'msg': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class AdvancedAnalyzeView(APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request):
+        if 'file' not in request.FILES:
+            return Response({'msg': 'No file part'}, status=status.HTTP_400_BAD_REQUEST)
+        file = request.FILES['file']
+        if file.name == '':
+            return Response({'msg': 'No selected file'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.name)[1]) as temp_file:
+                for chunk in file.chunks():
+                    temp_file.write(chunk)
+                image_path = temp_file.name
+
+            client = Client("https://huggingfacem4-screenshot2html.hf.space/--replicas/xt2tt/", hf_token="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")
+            result = client.predict(image_path, api_name="/model_inference")
+            os.remove(image_path)
+
+            # history = History.objects.create(
+            #     user=request.user,
+            #     image=file,
+            #     result=result
+            # )
+            # history.save()
+
+            return Response({'result': result[0]}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error during file processing: {e}", exc_info=True)
+            return Response({'msg': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 class ModifyAnalyzeView(APIView):
     parser_classes = [JSONParser]
@@ -175,3 +217,14 @@ class ModifyAnalyzeView(APIView):
             return Response({'result': result}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'msg': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+# class UserHistoryView(generics.ListAPIView):
+#     serializer_class = HistorySerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return History.objects.filter(user=self.request.user).order_by('-created_at')
+        
+
+        
+

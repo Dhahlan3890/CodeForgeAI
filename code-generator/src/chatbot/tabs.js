@@ -16,7 +16,7 @@ import {
 import Codes from './codes';
 import EmbeddedHtml from "./Design";
 
-function CodeTab({ result1 }) {
+function CodeTab({ result1 , darkMode}) {
   const [result, setResult] = useState(result1);
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
@@ -147,7 +147,7 @@ function CodeTab({ result1 }) {
   ];
 
   return (
-    <Tabs value="dashboard" id="tab">
+    <Tabs value="dashboard" id="tab" className={`${darkMode ? 'dark-mode' : ''}`}>
       <TabsHeader>
         {data.map(({ label, value, icon }) => (
           <Tab key={value} value={value}>

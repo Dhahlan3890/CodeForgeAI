@@ -2,11 +2,13 @@ import {
     Typography,
     Switch,
   } from "@material-tailwind/react";
+
+
   
-  function Settings({ darkMode, toggleDarkMode }) {
+  function Settings({ darkMode, toggleDarkMode, advancedMode, toggleAdvancedMode }) {
     return (
-      <div className="w-[32rem]">
-        <div className={`settings ${darkMode ? 'text-white' : ''}`}>
+      <div className="max-w-[32rem]">
+        <div className="settings">
           <Typography variant="h5" >
             Dark Mode
           </Typography>
@@ -16,7 +18,7 @@ import {
           <Typography variant="h5">
             Advanced AI
           </Typography>
-          <Switch />
+          <Switch defaultChecked={advancedMode} onChange={toggleAdvancedMode} />
         </div>
       </div>
     );

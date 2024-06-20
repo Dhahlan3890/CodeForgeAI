@@ -17,7 +17,7 @@ const EmbeddedHtml = ({ htmlContent }) => {
       ref={iframeRef}
       title="Html Content"
       width="100%"
-      height="500px"
+      height="400vh"
       style={{ border: '1px solid #ccc', marginTop: '20px', borderRadius: '20px'}}
     />
   );

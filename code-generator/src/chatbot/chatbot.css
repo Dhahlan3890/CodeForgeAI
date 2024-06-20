@@ -84,6 +84,12 @@
     border-radius: 10px;
 }
 
+@media (max-width: 960px) {
+    .chatbot {
+      display: block;
+    }
+  }
+
 
 
 

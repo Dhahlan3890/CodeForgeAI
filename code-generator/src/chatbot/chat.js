@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Spinner } from "@material-tailwind/react";
-import DragNDrop from './file-upload';
 
-function Chat({ onSubmit, onHistory }) {
-  const [text, setText] = useState('');
+function Chat({ onSubmit, onHistory, darkMode, advancedMode }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [history, setHistory] = useState([]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -31,6 +28,34 @@ function Chat({ onSubmit, onHistory }) {
     setImagePreview(null);
   };
 
+  const advancedanalyzeCode = async () => {
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/advancedanalyze/', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        onSubmit(data.result);
+        onHistory({ image: imagePreview, result: data.result });
+      } else {
+        setError(data.msg || 'Error analyzing code');
+      }
+    } catch (err) {
+      setError('Something went wrong!');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const analyzeCode = async () => {
     setLoading(true);
     setError(null);
@@ -48,21 +73,19 @@ function Chat({ onSubmit, onHistory }) {
       if (response.ok) {
         onSubmit(data.result);
         onHistory({ image: imagePreview, result: data.result });
-      }
-      else {
+      } else {
         setError(data.msg || 'Error analyzing code');
       }
     } catch (err) {
       setError('Something went wrong!');
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  
-
   return (
-    <form className='code-input' onSubmit={(e) => { e.preventDefault(); analyzeCode(); }}>
+    <form className={`code-input`} onSubmit={(e) => { e.preventDefault(); advancedMode ? advancedanalyzeCode() : analyzeCode(); }}>
       <div className="max-w-3xl" id="file-input">
         {!imagePreview && (
           <label className="flex justify-center w-full h-16 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
@@ -106,10 +129,7 @@ function Chat({ onSubmit, onHistory }) {
       <Button type="submit" variant="gradient" disabled={loading}>
         {loading ? <Spinner /> : 'Submit'}
       </Button>
-
-      
     </form>
-    
   );
 }
 

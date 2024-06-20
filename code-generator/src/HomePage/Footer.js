@@ -3,15 +3,15 @@ import { Typography } from "@material-tailwind/react";
 const SITEMAP = [
   {
     title: "Company",
-    links: ["About Us", "Careers", "Our Team", "Projects"],
+    links: ["About Us", "Our Team", "Projects"],
   },
   {
     title: "Help Center",
-    links: ["Discord", "Twitter", "GitHub", "Contact Us"],
+    links: ["Twitter", "GitHub", "Contact Us"],
   },
   {
     title: "Resources",
-    links: ["Blog", "Newsletter", "Free Products", "Affiliate Program"],
+    links: ["Blog", "Newsletter", "Affiliate Program"],
   },
   {
     title: "Products",
