@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Message from './Message';
@@ -14,53 +14,57 @@ import {
   Button,
 } from "@material-tailwind/react";
 import './login-signup.css';
+import AuthContext from '../context/AuthContext'
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [rememberMe, setRememberMe] = useState(false);
+  // const [message, setMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const isSuccess = await AuthService.login(email, password);
-    if (isSuccess) {
-      setMessage('Login successful!');
-      navigate('/chatbot'); // Navigate to the dashboard home page
-    } else {
-      setMessage('Invalid email or password');
-    }
-  };
+  const {loginUser} = useContext(AuthContext)
 
-  const handleGoogleLoginSuccess = async (credentialResponse) => {
-    const { credential } = credentialResponse;
-    try {
-      const response = await fetch('http://localhost:8000/api/google-login/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: credential }),
-      });
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // console.log(e.target)
 
-      const data = await response.json();
-      if (response.ok) {
-        AuthService.saveToken(data.token); // save token in AuthService
-        navigate('/chatbot');
-      } else {
-        setMessage(data.msg);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setMessage('Something went wrong!');
-    }
-  };
+    const email = e.target.email.value
+    const password = e.target.password.value
 
-  const handleGoogleLoginFailure = (error) => {
-    console.log('Google login failure:', error);
-    setMessage('Google login failed. Please try again.');
-  };
+    loginUser(email, password)
+  }
+
+  // const handleGoogleLoginSuccess = async (credentialResponse) => {
+  //   const { credential } = credentialResponse;
+  //   try {
+  //     const response = await fetch('http://localhost:8000/api/google-login/', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ token: credential }),
+  //     });
+
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       console.log("Google Token : ", data.token)
+  //       AuthService.saveToken(data.token); // save token in AuthService
+  //       navigate('/chatbot');
+  //     } else {
+  //       setMessage(data.msg || 'Google login failed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     setMessage('Something went wrong!');
+  //   }
+  // };
+
+  // const handleGoogleLoginFailure = (error) => {
+  //   console.log('Google login failure:', error);
+  //   setMessage('Google login failed. Please try again.');
+  // };
 
   return (
-    <GoogleOAuthProvider clientId="762258283337-qg5rlsln6kjmmj0r74nt10qbro8kj0rg.apps.googleusercontent.com">
+    // <GoogleOAuthProvider clientId="762258283337-qg5rlsln6kjmmj0r74nt10qbro8kj0rg.apps.googleusercontent.com">
       <form action="#" className="mx-auto max-w-[24rem] text-left" onSubmit={handleSubmit} id="card">
         <Card className="w-96">
           <CardHeader
@@ -73,15 +77,15 @@ function Login() {
             </Typography>
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
-            <Input label="Email" size="lg" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Input label="Password" size="lg" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <div className="-ml-2.5">
-              <Checkbox label="Remember Me" />
-            </div>
+            <Input label="Email" size="lg" type="email" name="email"/>
+            <Input label="Password" size="lg" type="password" name="password" />
+            {/* <div className="-ml-2.5">
+              <Checkbox label="Remember Me" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+            </div> */}
           </CardBody>
           <CardFooter className="pt-0 flex flex-col gap-4">
-            {message && <Message message={message} />}
-            <GoogleLogin
+            {/* {message && <Message message={message} />} */}
+            {/* <GoogleLogin
               onSuccess={handleGoogleLoginSuccess}
               onFailure={handleGoogleLoginFailure}
               render={(renderProps) => (
@@ -101,7 +105,7 @@ function Login() {
                   Sign in with Google
                 </Button>
               )}
-            />
+            /> */}
             <Button variant="gradient" fullWidth type="submit">
               Sign In
             </Button>
@@ -121,7 +125,7 @@ function Login() {
           </CardFooter>
         </Card>
       </form>
-    </GoogleOAuthProvider>
+    // </GoogleOAuthProvider>
   );
 }
 

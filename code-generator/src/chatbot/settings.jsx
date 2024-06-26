@@ -3,7 +3,6 @@ import {
     Switch,
   } from "@material-tailwind/react";
 
-
   
   function Settings({ darkMode, toggleDarkMode, advancedMode, toggleAdvancedMode }) {
     return (

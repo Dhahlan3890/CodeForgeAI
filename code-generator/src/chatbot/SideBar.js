@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { useNavigate } from 'react-router-dom';
 import {
   Card,
@@ -23,9 +23,11 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import AuthService from '../authService';
+import AuthContext from "../context/AuthContext";
 import LogoAi from "../HomePage/assets/logo_web_ai.png";
 import Updates from "./updates";
 import Settings from "./settings";
+import Profile from "./Profile";
 
 function Sidebar({ history_store, darkMode, toggleDarkMode, advancedMode, toggleAdvancedMode}) {
   const [open, setOpen] = React.useState(0);
@@ -35,8 +37,10 @@ function Sidebar({ history_store, darkMode, toggleDarkMode, advancedMode, toggle
 
   const navigate = useNavigate();
 
+  const {logoutUser} = useContext(AuthContext)
+
   const handleLogout = () => {
-    AuthService.logout();
+    logoutUser();
     navigate('/');
   };
 
@@ -87,6 +91,14 @@ function Sidebar({ history_store, darkMode, toggleDarkMode, advancedMode, toggle
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
+              <ListItem onClick={() => handleOpenDialog(<Profile/>)}>
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className={`h-3 w-5 ${darkMode ? 'text-blue-gray-100' : ''}`} />
+                </ListItemPrefix>
+                <Typography className={`mr-auto font-normal ${darkMode ? 'text-blue-gray-100' : ''}`} >
+                Profile
+              </Typography>
+              </ListItem>
               <ListItem onClick={() => handleOpenDialog(<Settings darkMode={darkMode} toggleDarkMode={toggleDarkMode} advancedMode={advancedMode} toggleAdvancedMode={toggleAdvancedMode} />)}>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className={`h-3 w-5 ${darkMode ? 'text-blue-gray-100' : ''}`} />

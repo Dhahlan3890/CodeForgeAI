@@ -1,21 +1,20 @@
 from django.urls import path
-from .views import RegisterView, LoginView, AnalyzeView, ModifyAnalyzeView, GoogleLoginView, AdvancedAnalyzeView
-from .views import protected_view
+from .views import RegisterView, AnalyzeView, ModifyAnalyzeView, AdvancedAnalyzeView, MyTokenObtainPairView, ProfileDetailView
+# from .views import ProfileDetail
+from .views import protectedView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
 urlpatterns = [
-    path('api/register/', RegisterView.as_view(), name='register'),
-    path('api/login/', LoginView.as_view(), name='login'),
-    path('api/analyze/', AnalyzeView.as_view(), name='analyze'),
-    path('api/advancedanalyze/', AdvancedAnalyzeView.as_view(), name='advancedanalyze'),
-    path('api/modify/', ModifyAnalyzeView.as_view(), name='modify_analyze'),
-    path('api/protected/', protected_view, name='protected'),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/google-login/', GoogleLoginView.as_view(), name='google-login'),
-    # path('api/history/', UserHistoryView.as_view(), name='user_history'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('analyze/', AnalyzeView.as_view(), name='analyze'),
+    path('advancedanalyze/', AdvancedAnalyzeView.as_view(), name='advancedanalyze'),
+    path('modify/', ModifyAnalyzeView.as_view(), name='modify_analyze'),
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('profile/', ProfileDetailView.as_view(), name='profile-detail'),
+    path('test/', protectedView, name="test"),
 
 ]

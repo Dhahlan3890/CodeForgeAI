@@ -1,5 +1,13 @@
 from django.contrib import admin
+from myapp.models import Profile, User
+# Register your models here.
 
-from .models import User
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['username','email']
 
-admin.site.register(User)
+class ProfileAdmin(admin.ModelAdmin):
+    list_editable = ['verified']
+    list_display = ['full_name', 'user', 'verified']
+
+admin.site.register(User,UserAdmin)
+admin.site.register(Profile, ProfileAdmin)
