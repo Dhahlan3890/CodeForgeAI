@@ -7,6 +7,7 @@ import {
     Switch,
     Input,
     Button,
+    Checkbox,
   } from "@material-tailwind/react";
 
 const Profile = () => {
@@ -95,22 +96,17 @@ const Profile = () => {
     // </div>
 
     <div className="max-w-[32rem]">
-        <div>
-        <Typography variant="h5" >
+        <div style={{marginBottom:"20px"}}>
+        <Typography variant="h5" className='mb-5'>
             Full Name
         </Typography>
         <Input label="Full Name" size="lg" name="full_name" value={profile.full_name} onChange={handleInputChange}/>
         </div>
-        <div>
-        <Typography variant="h5" >
+        <div style={{marginBottom:"20px"}}>
+        <Typography variant="h5" className='mb-5'>
             Bio
         </Typography>
         <Input label="Bio" size="lg" name="full_name" value={profile.bio} onChange={handleInputChange}/>
-        </div>
-        <div>
-        <Typography variant="h5" >
-            Verified
-        </Typography>
         </div>
         <Button
             variant="text"

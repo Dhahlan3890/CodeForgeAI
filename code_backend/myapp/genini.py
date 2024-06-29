@@ -77,3 +77,12 @@ def advanced_chat(image_path):
   refined_html = refined_html.text
 
   return refined_html
+
+
+def modify_chat(description, text):
+  chat_session1 = model.start_chat(history=[])
+  html_prompt = f"Validate the following HTML code based on the UI description and provide a refined version of the HTML code with {framework} CSS that improves accuracy, responsiveness, and adherence to the modified design. ONLY return the refined HTML code with inline CSS. Avoid using ```html. and ``` at the end. Here is the initial HTML: {text}. Here is the description of the UI elements: {description}"
+  refined_html = chat_session1.send_message(html_prompt)
+  refined_html = refined_html.text
+
+  return refined_html

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Spinner } from "@material-tailwind/react";
 
-function Chat({ onSubmit, onHistory, darkMode, advancedMode }) {
+function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
@@ -14,6 +14,12 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode }) {
       displayImage(selectedFile);
     }
   };
+
+  useEffect(() => {
+    if (historyImagePreview) {
+      setImagePreview(historyImagePreview);
+    }
+  }, [historyImagePreview]);
 
   const displayImage = (file) => {
     const reader = new FileReader();
@@ -126,7 +132,7 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode }) {
         )}
       </div>
       
-      <Button type="submit" variant="gradient" disabled={loading}>
+      <Button type="submit" variant="gradient" disabled={loading} className='submit-button'>
         {loading ? <Spinner /> : 'Submit'}
       </Button>
     </form>

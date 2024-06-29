@@ -29,7 +29,7 @@ import Updates from "./updates";
 import Settings from "./settings";
 import Profile from "./Profile";
 
-function Sidebar({ history_store, darkMode, toggleDarkMode, advancedMode, toggleAdvancedMode}) {
+function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, advancedMode, toggleAdvancedMode, handleHistoryClick, handleDeleteHistory}) {
   const [open, setOpen] = React.useState(0);
   const [dialogSize, setDialogSize] = React.useState(null);
   const [dialogContent, setDialogContent] = React.useState(null);
@@ -133,12 +133,12 @@ function Sidebar({ history_store, darkMode, toggleDarkMode, advancedMode, toggle
             <hr className="my-2 border-blue-gray-50" />
         {history_store && history_store.length > 0 ? (
           history_store.map((item, index) => (
-            <ListItem key={index} color={`${darkMode ? 'white' : 'blue-gray'}`}>
+            <ListItem key={index} color={`${darkMode ? 'white' : 'blue-gray'}`} onClick={() => handleHistoryClick(index)}>
               <ListItemPrefix>
                 {!item.image && <p>no image</p>}
                 {item.image && (
                   <div className={`mt-4 ${darkMode ? 'border-blue-gray-100' : ''}`} id="image-preview">
-                    <img src={item.image} alt="Uploaded" className={`w-20 h-7 object-cover mt-4 rounded-md ${darkMode ? 'text-blue-gray-100' : ''}`} />
+                    <img src={item.image.image} alt="Uploaded" className={`w-20 h-7 object-cover mt-4 rounded-md ${darkMode ? 'text-blue-gray-100' : ''}`} />
                   </div>
                 )}
               </ListItemPrefix>
@@ -147,7 +147,18 @@ function Sidebar({ history_store, darkMode, toggleDarkMode, advancedMode, toggle
               {item.result.substring(0, 50)}
               {item.result.length > 50 && '...'}
               </div>
+              
+              <Button
+                variant="text"
+                color="blue-gray"
+                onClick={() => handleDeleteHistory(item.id)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              </Button>
             </ListItem>
+          
           ))
         ) : (
           <div className={`mr-auto font-normal ${darkMode ? 'text-blue-gray-100' : ''}`}>

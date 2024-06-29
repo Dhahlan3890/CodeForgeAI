@@ -72,7 +72,7 @@
 .settings{
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .dark-mode {
@@ -87,6 +87,21 @@
 @media (max-width: 960px) {
     .chatbot {
       display: block;
+    }
+
+    .code-input{
+        height: 150px;
+        display: block;
+        margin-right: 10px;
+    }
+
+    .submit-button{
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    #file-input{
+        margin-left: 0px;
     }
   }
 

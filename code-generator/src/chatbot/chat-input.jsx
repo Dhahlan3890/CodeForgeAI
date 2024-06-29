@@ -20,7 +20,7 @@ export function ChatTextarea({ onSubmit }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, result }),
       });
 
       const data = await response.json();

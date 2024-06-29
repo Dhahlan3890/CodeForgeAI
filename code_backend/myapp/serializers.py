@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import Profile
+from .models import Profile, Image, ChatHistory
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,3 +59,24 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user', 'full_name', 'bio', 'verified']
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
+
+class ChatHistorySerializer(serializers.ModelSerializer):
+    image = ImageSerializer(required=False)
+
+    class Meta:
+        model = ChatHistory
+        fields = '__all__'
+        read_only_fields = ['user']
+
+
+# class HistorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = History
+#         fields = ['id', 'user', 'result', 'image', 'created_at']
+#         read_only_fields = ['id', 'user', 'created_at']

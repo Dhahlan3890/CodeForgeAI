@@ -42,3 +42,19 @@ def save_user_profile(sender, instance, **kwargs):
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='images/')
+
+class ChatHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    result = models.TextField()
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+# class History(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='history')
+#     result = models.TextField()
+#     image = models.ImageField(upload_to='history_images/', null=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)

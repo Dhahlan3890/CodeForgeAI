@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Textarea, Button, IconButton, Spinner } from "@material-tailwind/react";
-import HtmlRenderer from './HtmlRenderer';
+import { Textarea, IconButton, Spinner} from "@material-tailwind/react";
 import { DragDropContext } from 'react-beautiful-dnd';
 import {
   Tabs,
@@ -46,7 +45,7 @@ function CodeTab({ result1 , darkMode}) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: `Code:\n${result}\n\n\nTask : modify the code to ${text} and give the full modified code. Do not change the structure of code.` }),
+        body: JSON.stringify({ text: text, result: result}),
       });
 
       const data = await response.json();
@@ -77,10 +76,6 @@ function CodeTab({ result1 , darkMode}) {
 
     const updatedHtmlContent = elements.map(el => el.outerHTML).join('');
     setResult(`<html><body>${updatedHtmlContent}</body></html>`);
-  };
-
-  const handleHtmlChange = (updatedHtml) => {
-    setResult(updatedHtml);
   };
 
   const data = [

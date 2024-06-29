@@ -19,23 +19,16 @@ from rest_framework import status
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import logging
-from .genini import advanced_chat
+from .genini import advanced_chat, modify_chat
 from .models import Profile
 # from .serializers import ProfileSerializer
 from rest_framework import generics
-from .models import Profile
-from .serializers import ProfileSerializer
+from .models import Profile, Image, ChatHistory
+from .serializers import ProfileSerializer, ImageSerializer, ChatHistorySerializer
 
 
 logger = logging.getLogger(__name__)
 
-# class ProfileDetail(generics.RetrieveUpdateAPIView):
-#     queryset = Profile.objects.all()
-#     serializer_class = ProfileSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get_object(self):
-#         return self.request.user.profile
 
 from django.shortcuts import render
 from .models import User
@@ -48,7 +41,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import status
+from rest_framework import status, viewsets
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTOPS
@@ -74,41 +67,6 @@ def view_all_routes(request):
 
     return Response(data)
 
-# class GoogleLoginView(APIView):
-#     def post(self, request):
-#         token = request.data.get('token')
-#         if not token:
-#             return Response({'msg': 'No token provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         try:
-#             # Verify the token with Google
-#             id_info = id_token.verify_oauth2_token(token, requests.Request(), settings.GOOGLE_CLIENT_ID)
-#             email = id_info.get('email')
-#             name = id_info.get('name')
-
-#             # Check if the user exists, if not, create a new one
-#             user, created = User.objects.get_or_create(email=email, defaults={'name': name})
-#             if created:
-#                 user.set_unusable_password()  # Optional: make sure the user can't log in with a password
-#                 user.save()
-
-#             # Generate a JWT token for the user
-#             jwt_token = jwt.encode({
-#                 'user_id': user.id,
-#                 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-#             }, settings.SECRET_KEY, algorithm='HS256')
-
-#             return Response({'token': jwt_token}, status=status.HTTP_200_OK)
-#         except ValueError:
-#             return Response({'msg': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
-#         except Exception as e:
-#             return Response({'msg': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-
-# 
-# client1 = Client("eswardivi/Phi-3-mini-128k-instruct")
-
 
 
 def extract_html_content(text):
@@ -124,53 +82,7 @@ def extract_code_content(text):
     cleaned_text = re.sub(pattern, '', text)
     return cleaned_text.strip()
 
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def protected_view(request):
-#     return Response({"message": "This is a protected view"})
 
-# class RegisterView(APIView):
-#     def post(self, request):
-#         data = request.data
-#         name = data.get('name')
-#         email = data.get('email')
-#         password = data.get('password')
-
-#         if not name or not email or not password:
-#             return Response({'msg': 'Please enter all fields'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         if User.objects.filter(email=email).exists():
-#             return Response({'msg': 'User already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-#         user = User(name=name, email=email, password=hashed_password)
-#         user.save()
-
-#         return Response({'msg': 'User registered successfully'}, status=status.HTTP_201_CREATED)
-
-# class LoginView(APIView):
-#     def post(self, request):
-#         data = request.data
-#         email = data.get('email')
-#         password = data.get('password')
-
-#         if not email or not password:
-#             return Response({'msg': 'Please enter all fields'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         try:
-#             user = User.objects.get(email=email)
-#         except User.DoesNotExist:
-#             return Response({'msg': 'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
-#             token = jwt.encode({
-#                 'user_id': user.id,
-#                 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-#             }, settings.SECRET_KEY, algorithm='HS256')
-
-#             return Response({'token': token}, status=status.HTTP_200_OK)
-#         else:
-#             return Response({'msg': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
 
 class AnalyzeView(APIView):
     parser_classes = [MultiPartParser]
@@ -250,20 +162,26 @@ class ModifyAnalyzeView(APIView):
         if text_input == '':
             return Response({'msg': 'No text input provided'}, status=status.HTTP_400_BAD_REQUEST)
         
+        # Check if 'result' is provided in the request data (if necessary)
+        if 'result' not in request.data:
+            return Response({'msg': 'No result input provided'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        result_input = request.data['result']
+        
         try:
             # result = client1.predict(message=text_input,
             #                         request=0.8,
             #                         param_3=True,
             #                         param_4=1024,
             #                         api_name="/chat")
-            result = chat(text_input)
+            result = modify_chat(text_input, result_input)
             
             # Extract the HTML content from the tuple result
-            if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], list) and len(result[1]) > 0 and isinstance(result[1][0], list) and len(result[1][0]) > 1:
-                result = result[1][0][1]
+            # if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], list) and len(result[1]) > 0 and isinstance(result[1][0], list) and len(result[1][0]) > 1:
+            #     result = result[1][0][1]
             
-            result = extract_html_content(result)
-            result = extract_code_content(result)
+            # result = extract_html_content(result)
+            # result = extract_code_content(result)
             
             return Response({'result': result}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -279,6 +197,50 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class ChatHistoryViewSet(viewsets.ModelViewSet):
+    queryset = ChatHistory.objects.all()
+    serializer_class = ChatHistorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        image_data = self.request.data.get('image', None)
+        if image_data:
+            image_serializer = ImageSerializer(data={'image': image_data})
+            if image_serializer.is_valid():
+                image_instance = image_serializer.save()
+                serializer.save(user=self.request.user, image=image_instance)
+            else:
+                return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer.save(user=self.request.user)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        image_instance = instance.image
+        self.perform_destroy(instance)
+        if image_instance:
+            image_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ImageViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+    permission_classes = [IsAuthenticated]
+
+
+# class HistoryListCreateView(generics.ListCreateAPIView):
+#     serializer_class = HistorySerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return History.objects.filter(user=self.request.user).order_by('-created_at')
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user)
+
+
         
         
 
