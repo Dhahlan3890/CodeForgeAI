@@ -204,6 +204,10 @@ class ChatHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = ChatHistorySerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        # Filter the chat history by the authenticated user
+        return ChatHistory.objects.filter(user=self.request.user).order_by('-timestamp')
+
     def perform_create(self, serializer):
         image_data = self.request.data.get('image', None)
         if image_data:

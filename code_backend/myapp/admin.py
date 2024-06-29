@@ -1,5 +1,5 @@
 from django.contrib import admin
-from myapp.models import Profile, User
+from myapp.models import Profile, User, ChatHistory
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
@@ -16,4 +16,5 @@ class ProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(User,UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(ChatHistory)
 # admin.site.register(History, HistoryAdmin)
