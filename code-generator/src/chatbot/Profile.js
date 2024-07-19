@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from './axiosInstance'; // Adjust import path as per your setup
 import {
     Typography,
-    Switch,
+
     Input,
     Button,
-    Checkbox,
+
   } from "@material-tailwind/react";
 
 const Profile = () => {
