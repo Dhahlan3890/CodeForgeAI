@@ -42,7 +42,7 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/api/advancedanalyze/', {
+      const response = await fetch('http://codeforgeai.onrender.com/api/advancedanalyze/', {
         method: 'POST',
         body: formData,
       });
@@ -70,7 +70,7 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/api/analyze/', {
+      const response = await fetch('http://codeforgeai.onrender.com/api/analyze/', {
         method: 'POST',
         body: formData,
       });

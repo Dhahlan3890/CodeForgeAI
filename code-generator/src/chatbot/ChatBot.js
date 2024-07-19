@@ -46,7 +46,7 @@ function ChatBot() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/chathistory/', {
+      const response = await fetch('http://codeforgeai.onrender.com/api/chathistory/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
