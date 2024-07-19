@@ -64,36 +64,7 @@ const Profile = () => {
   }
 
   return (
-    // <div>
-    //   <h1>Profile</h1>
-    //   <div>
-    //     <label>Full Name:</label>
-    //     <input
-    //       type="text"
-    //       name="full_name"
-    //       value={profile.full_name}
-    //       onChange={handleInputChange}
-    //     />
-    //   </div>
-    //   <div>
-    //     <label>Bio:</label>
-    //     <textarea
-    //       name="bio"
-    //       value={profile.bio}
-    //       onChange={handleInputChange}
-    //     />
-    //   </div>
-    //   <div>
-    //     <label>Verified:</label>
-    //     <input
-    //       type="checkbox"
-    //       name="verified"
-    //       checked={profile.verified}
-    //       onChange={handleInputChange}
-    //     />
-    //   </div>
-    //   <button onClick={handleUpdateProfile}>Save Profile</button>
-    // </div>
+
 
     <div className="max-w-[32rem]">
         <div style={{marginBottom:"20px"}}>
@@ -106,7 +77,7 @@ const Profile = () => {
         <Typography variant="h5" className='mb-5'>
             Bio
         </Typography>
-        <Input label="Bio" size="lg" name="full_name" value={profile.bio} onChange={handleInputChange}/>
+        <Input label="Bio" size="lg" name="bio" value={profile.bio} onChange={handleInputChange}/>
         </div>
         <Button
             variant="text"
@@ -116,16 +87,7 @@ const Profile = () => {
           >
             <span>Save</span>
           </Button>
-    {/* <Typography variant="h5" >
-        Dark Mode
-    </Typography>
-    <Switch defaultChecked={darkMode} onChange={toggleDarkMode}  />
-    </div>
-    <div className="settings">
-    <Typography variant="h5">
-        Advanced AI
-    </Typography>
-    <Switch defaultChecked={advancedMode} onChange={toggleAdvancedMode} /> */}
+  
     
     </div>
   );

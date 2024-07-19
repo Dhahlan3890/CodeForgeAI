@@ -35,3 +35,6 @@ function App() {
 }
 
 export default App;
+
+   // "start-react": "react-scripts start",
+    // "start-django": "cd ../code_backend && python manage.py runserver",
