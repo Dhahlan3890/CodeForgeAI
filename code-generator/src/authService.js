@@ -2,7 +2,7 @@
 const AuthService = {
   login: async (email, password) => {
     try {
-      const response = await fetch('http://codeforgeai.onrender.com/api/login/', {
+      const response = await fetch('http://localhost:8000/api/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

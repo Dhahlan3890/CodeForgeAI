@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://codeforgeai.onrender.com/',  // Adjust base URL as per your Django backend
+  baseURL: 'http://localhost:8000/',  // Adjust base URL as per your Django backend
   timeout: 5000,  // Adjust timeout as needed
 });
 

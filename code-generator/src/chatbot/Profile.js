@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from './axiosInstance'; // Adjust import path as per your setup
 import {
     Typography,
-
+    Switch,
     Input,
     Button,
-
+    Checkbox,
   } from "@material-tailwind/react";
 
 const Profile = () => {
@@ -77,7 +77,7 @@ const Profile = () => {
         <Typography variant="h5" className='mb-5'>
             Bio
         </Typography>
-        <Input label="Bio" size="lg" name="bio" value={profile.bio} onChange={handleInputChange}/>
+        <Input label="Bio" size="lg" name="full_name" value={profile.bio} onChange={handleInputChange}/>
         </div>
         <Button
             variant="text"

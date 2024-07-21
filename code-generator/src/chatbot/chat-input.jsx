@@ -15,7 +15,7 @@ export function ChatTextarea({ onSubmit }) {
     setError(null);
 
     try {
-      const response = await fetch('http://codeforgeai.onrender.com/api/modify/', {
+      const response = await fetch('zapi/modify/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
