@@ -1,7 +1,9 @@
 // api.js
 import axios from 'axios';
+const apiUrl = process.env.REACT_APP_API_URL;
 
-const API_URL = 'http://localhost:8000/api';
+
+const API_URL = `${apiUrl}/api`;
 
 export const saveHistory = async (history) => {
   try {

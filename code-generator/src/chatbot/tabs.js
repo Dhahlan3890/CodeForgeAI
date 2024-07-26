@@ -20,6 +20,8 @@ function CodeTab({ result1 , darkMode}) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
     if (result1 !== null) {
@@ -40,7 +42,7 @@ function CodeTab({ result1 , darkMode}) {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/api/modify/', {
+      const response = await fetch(`${apiUrl}/api/modify/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

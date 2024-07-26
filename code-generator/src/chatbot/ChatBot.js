@@ -15,6 +15,8 @@ function ChatBot() {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const openDrawer = () => setIsDrawerOpen(true);
   const closeDrawer = () => setIsDrawerOpen(false);
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -46,7 +48,7 @@ function ChatBot() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/chathistory/', {
+      const response = await fetch(`${apiUrl}/api/chathistory/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -71,7 +73,7 @@ function ChatBot() {
     const tokens = JSON.parse(authTokens);
     const token = tokens.access;
 
-    const response = await fetch('http://localhost:8000/api/chathistory/', {
+    const response = await fetch(`${apiUrl}/api/chathistory/`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -131,7 +133,7 @@ function ChatBot() {
     const tokens = JSON.parse(authTokens);
     const token = tokens.access;
 
-    const response = await fetch(`http://localhost:8000/api/chathistory/${index}/`, {
+    const response = await fetch(`${apiUrl}/api/chathistory/${index}/`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`

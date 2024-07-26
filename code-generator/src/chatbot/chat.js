@@ -6,6 +6,7 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -42,7 +43,7 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/api/advancedanalyze/', {
+      const response = await fetch(`${apiUrl}/api/advancedanalyze/`, {
         method: 'POST',
         body: formData,
       });

@@ -6,6 +6,7 @@ const swal = require('sweetalert2')
 
 const AuthContext = createContext();
 
+
 export default AuthContext
 
 export const AuthProvider = ({ children }) => {
@@ -25,8 +26,10 @@ export const AuthProvider = ({ children }) => {
 
     const navigate = useNavigate()
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const loginUser = async (email, password) => {
-        let url = "http://127.0.0.1:8000/api/token/"
+        let url = `${apiUrl}/api/token/`
         const response = await fetch(url,{
             method: "POST",
             headers: {
@@ -67,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const registerUser = async (full_name, email, username, password, password2) => {
-        let url = "http://127.0.0.1:8000/api/register/"
+        let url = `${apiUrl}/api/register/`
         const response = await fetch(url,{
             method: "POST",
             headers: {

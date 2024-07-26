@@ -5,6 +5,8 @@ export function ChatTextarea({ onSubmit }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -15,7 +17,7 @@ export function ChatTextarea({ onSubmit }) {
     setError(null);
 
     try {
-      const response = await fetch('zapi/modify/', {
+      const response = await fetch(`${apiUrl}api/modify/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
