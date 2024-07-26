@@ -1,5 +1,5 @@
 import { Carousel, Typography} from "@material-tailwind/react";
-import { Textarea, Button, IconButton, Spinner } from "@material-tailwind/react";
+import { Textarea, Button, IconButton } from "@material-tailwind/react";
 import Card1 from "./assets/card1.jpg"
 import Card2 from "./assets/card2.jpg"
 import Card3 from "./assets/card3.jpg"

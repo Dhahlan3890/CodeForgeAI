@@ -1,8 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import Message from './Message';
-import AuthService from '../authService';
 import {
   Card,
   CardHeader,
@@ -10,7 +7,6 @@ import {
   CardFooter,
   Typography,
   Input,
-  Checkbox,
   Button,
 } from "@material-tailwind/react";
 import './login-signup.css';

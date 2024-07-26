@@ -6,9 +6,7 @@ import {
   Typography,
   Button,
   IconButton,
-  Card,
 } from "@material-tailwind/react";
-import CarouselTansition from './cards'
 import CarouselTransition from "./cards";
 import Footer from "./Footer";
 import WhyCode from "./Why_code";
