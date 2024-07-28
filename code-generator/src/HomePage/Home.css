@@ -96,6 +96,15 @@ html {
 
 
 @media (max-width: 768px) {
+  
+
+  #logo-header{
+    margin-top: -30px;
+    margin-bottom: -40px;
+    margin-left:10px;
+    width: 70px;
+    overflow: auto;
+  }
 
   #whycode {
     padding: 1rem;
