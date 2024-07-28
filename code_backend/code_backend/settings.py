@@ -152,6 +152,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configure CORS
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'https://codeforgeais.onrender.com',
+    'https://codeforgeai.netlify.app',
+    'https://codeforgeai.onrender.com',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
