@@ -93,5 +93,22 @@ html {
 #codeforge-button{
   display: inline-flex;
 }
-  
+
+
+@media (max-width: 768px) {
+
+  #whycode {
+    padding: 1rem;
+    padding-left: 1rem;
+    margin-top: 10px;
+  }
+
+
+
+  #codeforge-button {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+  }
+}
   

@@ -155,7 +155,7 @@ function Header() {
           </div>
         </MobileNav>
       </Navbar>
-      <div className="mx-auto max-w-[calc(100%-4rem)] py-12 mb-12 overflow-hidden">
+      <div className="mx-auto max-w-[calc(100%-2rem)] py-12 mb-12 overflow-hidden">
         <CarouselTransition />
       </div>
       <div id="whycode">

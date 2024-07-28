@@ -6,7 +6,7 @@ import Card3 from "./assets/card3.jpg"
  
 function CarouselTransition() {
   return (
-    <Carousel transition={{ duration: 1 }} className="rounded-xl" autoplay="true" loop="true">
+    <Carousel transition={{ duration: 1 }} className="rounded-xl" autoplay="true" loop="true" id="slide">
         <div className="relative h-full w-full">
             <img
                 src={Card1}
