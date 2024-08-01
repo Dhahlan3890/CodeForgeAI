@@ -23,18 +23,22 @@ function Login() {
 
   const {loginUser} = useContext(AuthContext)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     setLoading(true);
-    e.preventDefault()
-    // console.log(e.target)
-    
+    e.preventDefault();
 
-    const email = e.target.email.value
-    const password = e.target.password.value
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-    loginUser(email, password)
-    setLoading(false);
-  }
+    try {
+        await loginUser(email, password);
+    } catch (error) {
+        console.error("Login failed", error);
+    } finally {
+        setLoading(false);
+    }
+}
+
 
 
   // const handleGoogleLoginSuccess = async (credentialResponse) => {

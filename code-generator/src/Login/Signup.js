@@ -32,14 +32,23 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     setLoading(true);
-    e.preventDefault()
-    console.log(full_name)
-    console.log(email)
-    console.log(username)
+    e.preventDefault();
 
-    registerUser(full_name, email, username, password, password2)
-    setLoading(false);
-  }
+    const full_name = e.target.full_name.value;
+    const email = e.target.email.value;
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    const password2 = e.target.password2.value;
+
+    try {
+        await registerUser(full_name, email, username, password, password2);
+    } catch (error) {
+        console.error("Registration failed", error);
+    } finally {
+        setLoading(false);
+    }
+}
+
 
   // const handleGoogleLoginSuccess = async (credentialResponse) => {
   //   const { credential } = credentialResponse;
