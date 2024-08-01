@@ -8,6 +8,7 @@ import {
   Typography,
   Input,
   Button,
+  Spinner,
 } from "@material-tailwind/react";
 import './login-signup.css';
 import AuthContext from "../context/AuthContext"
@@ -20,15 +21,17 @@ function Signup() {
   // const [rememberMe, setRememberMe] = useState(false);
   // const [message, setMessage] = useState('');
 
-  const [full_name, setFull_name] = useState("")
+  const [full_name, setFull_name] = useState("");
   // const [email, setEmail] = useState("")
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState("");
   // const [password, setPassword] = useState("")
-  const [password2, setPassword2] = useState("")
+  const [password2, setPassword2] = useState("");
 
-  const {registerUser} = useContext(AuthContext)
+  const {registerUser} = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault()
     console.log(full_name)
     console.log(email)
@@ -111,7 +114,7 @@ function Signup() {
               )}
             /> */}
             <Button variant="gradient" fullWidth type="submit">
-              Sign Up
+              {loading ? <Spinner /> : 'Sign Up'}
             </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
               Already have an account?

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import {
   Card,
@@ -8,6 +8,7 @@ import {
   Typography,
   Input,
   Button,
+  Spinner,
 } from "@material-tailwind/react";
 import './login-signup.css';
 import AuthContext from '../context/AuthContext'
@@ -18,12 +19,15 @@ function Login() {
   // const [password, setPassword] = useState('');
   // const [rememberMe, setRememberMe] = useState(false);
   // const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {loginUser} = useContext(AuthContext)
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault()
     // console.log(e.target)
+    
 
     const email = e.target.email.value
     const password = e.target.password.value
@@ -103,7 +107,7 @@ function Login() {
               )}
             /> */}
             <Button variant="gradient" fullWidth type="submit">
-              Sign In
+              {loading ? <Spinner /> : 'Sign In'}
             </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
               Don&apos;t have an account?
