@@ -38,6 +38,7 @@ function Signup() {
     console.log(username)
 
     registerUser(full_name, email, username, password, password2)
+    setLoading(false);
   }
 
   // const handleGoogleLoginSuccess = async (credentialResponse) => {

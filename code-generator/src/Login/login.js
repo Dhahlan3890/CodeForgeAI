@@ -33,7 +33,9 @@ function Login() {
     const password = e.target.password.value
 
     loginUser(email, password)
+    setLoading(false);
   }
+
 
   // const handleGoogleLoginSuccess = async (credentialResponse) => {
   //   const { credential } = credentialResponse;
