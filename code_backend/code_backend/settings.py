@@ -28,7 +28,7 @@ GOOGLE_CLIENT_ID = '762258283337-qg5rlsln6kjmmj0r74nt10qbro8kj0rg.apps.googleuse
 SECRET_KEY = 'django-insecure-r0(xlfj!kp*dceq=8ea)jde(e2z04^qhl1vre$(u5@r^!3j^f!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*','codeforgeai.onrender.com']
 
