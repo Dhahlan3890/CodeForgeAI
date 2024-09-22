@@ -214,6 +214,8 @@ class ChatHistoryViewSet(viewsets.ModelViewSet):
             image_serializer = ImageSerializer(data={'image': image_data})
             if image_serializer.is_valid():
                 image_instance = image_serializer.save()
+                # image_instance = Image()
+                # image_instance.save_image_as_array(image_data)
                 serializer.save(user=self.request.user, image=image_instance)
             else:
                 return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db.models.signals import post_save
+import numpy as np
+from PIL import Image as PILImage
 # Create your models here.
 
 class User(AbstractUser):
@@ -45,6 +47,15 @@ post_save.connect(save_user_profile, sender=User)
 
 class Image(models.Model):
     image = models.ImageField(upload_to='images/')
+
+    # image = models.BinaryField()
+
+    # def save_image_as_array(self, image):
+    #     pil_image = PILImage.open(image)
+    #     image_array = np.array(pil_image)
+    #     serialized_array = image_array.tobytes()
+    #     self.image = serialized_array
+    #     self.save()
 
 class ChatHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
