@@ -2,6 +2,8 @@
 
 **CodeForgeAI** is an innovative web app that transforms website screenshots into clean, functional code. With a user-friendly interface, you can not only generate code from images but also modify the design to suit your needs. Unlock the power of automated coding and streamline your web development process with CodeForgeAI.
 
+https://github.com/user-attachments/assets/68979b2c-2ee8-4417-b662-827e743bd4b1
+
 ## Technologies Used
 - Frontend: React
 - Backend: Django, Django REST framework, Gemini api
