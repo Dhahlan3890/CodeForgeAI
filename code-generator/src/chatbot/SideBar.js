@@ -144,8 +144,7 @@ function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, ad
               </ListItemPrefix>
               <div className={`mr-auto font-normal ${darkMode ? 'text-blue-gray-100' : ''}`}>
                 
-              {item.result.substring(0, 50)}
-              {item.result.length > 50 && '...'}
+              {item.result.substring(item.result.indexOf('<title>') + 7, item.result.indexOf('</title>'))}
               </div>
               
               <Button
