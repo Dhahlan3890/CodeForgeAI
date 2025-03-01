@@ -20,7 +20,8 @@ class User(AbstractUser):
         help_text='Specific permissions for this user.',
         related_query_name='user',
     )
-    username = models.CharField(max_length=100, unique=True)  # Ensure username is unique
+
+    username = models.CharField(default="", max_length=100)
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = 'email'
