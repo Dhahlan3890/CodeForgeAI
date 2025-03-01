@@ -3,12 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 # from .serializers import UserSerializer, HistorySerializer
-import bcrypt
+# import bcrypt
 import jwt
 import datetime
 from django.conf import settings
 from rest_framework.parsers import MultiPartParser, JSONParser
-from gradio_client import Client
+# from gradio_client import Client
 import os
 import tempfile
 from rest_framework.decorators import api_view, permission_classes
