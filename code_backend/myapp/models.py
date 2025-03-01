@@ -8,20 +8,20 @@ from PIL import Image as PILImage
 class User(AbstractUser):
     groups = models.ManyToManyField(
         Group,
-        related_name='myapp_user_set',  # Custom related name
+        related_name='myapp_user_set',
         blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        help_text='The groups this user belongs to.',
         related_query_name='user',
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='myapp_user_set',  # Custom related name
+        related_name='myapp_user_set',
         blank=True,
         help_text='Specific permissions for this user.',
         related_query_name='user',
     )
-    username = models.CharField(default="", max_length=100)
-    email = models.EmailField(unique = True)
+    username = models.CharField(max_length=100, unique=True)  # Ensure username is unique
+    email = models.EmailField(unique=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -33,7 +33,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(default="", max_length=100)
     bio = models.CharField(default="", max_length=1000)
-    verified = models.BooleanField(default = False)
+    verified = models.BooleanField(default=False)
+    meta = models.JSONField(default=dict)  # MongoDB-friendly field for flexible metadata
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -46,22 +47,23 @@ post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='images/')
+    image = models.BinaryField()  # Ensure image is stored as binary data
+    created_at = models.DateTimeField(auto_now_add=True)
+    meta = models.JSONField(default=dict)
 
-    # image = models.BinaryField()
-
-    # def save_image_as_array(self, image):
-    #     pil_image = PILImage.open(image)
-    #     image_array = np.array(pil_image)
-    #     serialized_array = image_array.tobytes()
-    #     self.image = serialized_array
-    #     self.save()
+    def save_image_as_array(self, image):
+        pil_image = PILImage.open(image)
+        image_array = np.array(pil_image)
+        serialized_array = image_array.tobytes()  # Ensure binary data
+        self.image = serialized_array
+        self.save()
 
 class ChatHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     result = models.TextField()
     image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    meta = models.JSONField(default=dict)  # For flexible metadata storage
 
 
 # class History(models.Model):

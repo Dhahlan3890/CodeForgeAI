@@ -1,10 +1,17 @@
 import pathlib
 import textwrap
-import google.generativeai as genai
+from google import genai
 
-from IPython.display import display
-from IPython.display import Markdown
+# from IPython.display import display
+# from IPython.display import Markdown
 import PIL.Image
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+
+
 
 # Framework selection (e.g., Tailwind, Bootstrap, etc.)
 framework = "Regular CSS use flex grid etc"  # Change this to "Bootstrap" or any other framework as needed
@@ -13,41 +20,44 @@ def to_markdown(text):
   text = text.replace('•', '')
   return textwrap.indent(text, '', predicate=lambda _: True)
 
-genai.configure(api_key="AIzaSyDDSwzN5o85ckkRVJXZEidq9zIPKIP8HtY")
+client = genai.Client(api_key=os.getenv("GEMINI_API"))
 
-generation_config = {
-    "temperature": 1,
-    "top_p": 0.95,
-    "top_k": 64,
-    "max_output_tokens": 8192,
-    "response_mime_type": "text/plain",
-}
+# generation_config = {
+#     "temperature": 1,
+#     "top_p": 0.95,
+#     "top_k": 64,
+#     "max_output_tokens": 8192,
+#     "response_mime_type": "text/plain",
+# }
 
-safety_settings = [
-    {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-    {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-    {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-    {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
-]
+# safety_settings = [
+#     {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+#     {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+#     {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+#     {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+# ]
 
-for m in genai.list_models():
-  if 'generateContent' in m.supported_generation_methods:
-    print(m.name)
+# for m in genai.list_models():
+#   if 'generateContent' in m.supported_generation_methods:
+#     print(m.name)
 
-model = genai.GenerativeModel('models/gemini-1.5-flash-latest', safety_settings=safety_settings, generation_config=generation_config)
+# model = genai.GenerativeModel('models/gemini-1.5-flash-latest', safety_settings=safety_settings, generation_config=generation_config)
 # chat = model.start_chat(history=[])
 # chat
 
 def chat(text):
-    response = model.generate_content(text)
+    response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[text])
     # response = chat.send_message(text)
 
     return to_markdown(response.text)
 
 def image_prompt(path):
   img = PIL.Image.open(path)
-  response = model.generate_content(["Give me full css embbeded html code to create exact duplicate of provided scrennshot of a webpage. consider all the minor details and Put sime extra care on the positions of the components in the webpage. use multi plateform friendly designs. Dont give me wrong webpage.", img], stream=True)
-  response.resolve()
+  response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=["Give me full css embbeded html code to create exact duplicate of provided scrennshot of a webpage. consider all the minor details and Put sime extra care on the positions of the components in the webpage. use multi plateform friendly designs. Dont give me wrong webpage.", img])
   # print(response.text)
   return to_markdown(response.text)
 
@@ -58,7 +68,7 @@ def image_prompt(path):
 #     return to_markdown(response.text)
 
 def advanced_chat(image_path):
-  chat_session = model.start_chat(history=[])
+  chat_session = client.chats.create(model="gemini-2.0-flash")
   img = PIL.Image.open(image_path)
   prompt = "Describe this UI in accurate details. When you reference a UI element put its name and bounding box in the format: [object name (y_min, x_min, y_max, x_max)]. Also Describe the color of the elements."
   description = chat_session.send_message([prompt, img])
@@ -80,7 +90,7 @@ def advanced_chat(image_path):
 
 
 def modify_chat(description, text):
-  chat_session1 = model.start_chat(history=[])
+  chat_session1 = client.chats.create(model="gemini-2.0-flash")
   html_prompt = f"Validate the following HTML code based on the UI description and provide a refined version of the HTML code with {framework} CSS that improves accuracy, responsiveness, and adherence to the modified design. ONLY return the refined HTML code with inline CSS. Avoid using ```html. and ``` at the end. Here is the initial HTML: {text}. Here is the description of the UI elements: {description}"
   refined_html = chat_session1.send_message(html_prompt)
   refined_html = refined_html.text

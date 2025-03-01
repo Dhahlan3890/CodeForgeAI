@@ -5,6 +5,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import Profile, Image, ChatHistory
+import base64
+import io
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,9 +64,44 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Image
         fields = '__all__'
+
+    # @staticmethod
+    # def get_image_format(image_bytes):
+    #     from PIL import Image
+    #     try:
+    #         image = Image.open(io.BytesIO(image_bytes))
+    #         return image.format.lower()  # Returns 'png', 'jpeg', etc.
+    #     except Exception as e:
+    #         print(f"Error determining image format: {e}")
+    #         return None
+
+    def get_image(self, obj):
+        if obj.image:
+            # If obj.image is already a base64 string, return it directly
+            print(f"Type of obj.image: {type(obj.image)}")  # Debugging
+            if isinstance(obj.image, str) and obj.image.startswith('data:'):
+                print("Returning obj.image directly")  # Debugging
+                return obj.image
+            # If obj.image is bytes, encode it as base64
+            elif isinstance(obj.image, bytes):
+                print("Encoding obj.image as base64")
+                # image_format = self.get_image_format(obj.image)
+                # if image_format:
+                base64_string = base64.b64encode(obj.image).decode('utf-8')
+                base64_string = f"data:image/jpeg;base64,{base64_string}"
+                print(f"Base64 string: {base64_string[:40]}")  # Debugging
+                return base64_string
+
+            # If obj.image is a string (but not base64), convert it to bytes first
+            elif isinstance(obj.image, str):
+                print("Converting obj.image to bytes and encoding as base64")
+                return base64.b64encode(obj.image.encode('utf-8')).decode('utf-8')
+        return None
 
 class ChatHistorySerializer(serializers.ModelSerializer):
     image = ImageSerializer(required=False)

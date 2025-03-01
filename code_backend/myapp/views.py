@@ -3,12 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 # from .serializers import UserSerializer, HistorySerializer
-import bcrypt
-import jwt
-import datetime
+# import bcrypt
+# import jwt
+# import datetime
 from django.conf import settings
 from rest_framework.parsers import MultiPartParser, JSONParser
-from gradio_client import Client
+# from gradio_client import Client
 import os
 import tempfile
 from rest_framework.decorators import api_view, permission_classes
@@ -16,8 +16,8 @@ from rest_framework.permissions import IsAuthenticated
 import re
 from .genini import chat, image_prompt
 from rest_framework import status
-from google.oauth2 import id_token
-from google.auth.transport import requests
+# from google.oauth2 import id_token
+# from google.auth.transport import requests
 import logging
 from .genini import advanced_chat, modify_chat
 from .models import Profile
@@ -211,14 +211,9 @@ class ChatHistoryViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         image_data = self.request.data.get('image', None)
         if image_data:
-            image_serializer = ImageSerializer(data={'image': image_data})
-            if image_serializer.is_valid():
-                image_instance = image_serializer.save()
-                # image_instance = Image()
-                # image_instance.save_image_as_array(image_data)
-                serializer.save(user=self.request.user, image=image_instance)
-            else:
-                return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            image_instance = Image()
+            image_instance.save_image_as_array(image_data)
+            serializer.save(user=self.request.user, image=image_instance)
         else:
             serializer.save(user=self.request.user)
 
@@ -247,6 +242,6 @@ class ImageViewSet(viewsets.ModelViewSet):
 #         serializer.save(user=self.request.user)
 
 
-        
-        
+
+
 
