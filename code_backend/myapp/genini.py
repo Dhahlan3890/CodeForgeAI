@@ -53,11 +53,11 @@ def chat(text):
 
     return to_markdown(response.text)
 
-def image_prompt(path):
+def image_prompt(path, framework):
   img = PIL.Image.open(path)
   response = client.models.generate_content(
     model="gemini-2.0-flash",
-    contents=["Give me full css embbeded html code to create exact duplicate of provided scrennshot of a webpage. consider all the minor details and Put sime extra care on the positions of the components in the webpage. use multi plateform friendly designs. Dont give me wrong webpage.", img])
+    contents=[f"Give me full css embbeded html code to create exact duplicate of provided scrennshot of a webpage. consider all the minor details and Put sime extra care on the positions of the components in the webpage. use multi plateform friendly designs. Dont give me wrong webpage. use {framework} framework", img])
   # print(response.text)
   return to_markdown(response.text)
 
@@ -67,7 +67,7 @@ def image_prompt(path):
 #     response = chat_session.send_message([text, img], stream=True)
 #     return to_markdown(response.text)
 
-def advanced_chat(image_path):
+def advanced_chat(image_path, framework):
   chat_session = client.chats.create(model="gemini-2.0-flash")
   img = PIL.Image.open(image_path)
   prompt = "Describe this UI in accurate details. When you reference a UI element put its name and bounding box in the format: [object name (y_min, x_min, y_max, x_max)]. Also Describe the color of the elements."

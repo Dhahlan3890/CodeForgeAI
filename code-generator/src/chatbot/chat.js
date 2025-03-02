@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Spinner } from "@material-tailwind/react";
 
-function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview }) {
+function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview, framework }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
@@ -41,6 +41,7 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('framework', framework); // Append framework to formData
 
     try {
       const response = await fetch(`${apiUrl}/api/advancedanalyze/`, {
@@ -69,6 +70,7 @@ function Chat({ onSubmit, onHistory, darkMode, advancedMode, historyImagePreview
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('framework', framework); // Append framework to formData
 
     try {
       const response = await fetch(`${apiUrl}/api/analyze/`, {

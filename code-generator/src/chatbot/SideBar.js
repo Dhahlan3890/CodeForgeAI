@@ -14,6 +14,8 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
+  Select,
+  Option,
 } from "@material-tailwind/react";
 import {
   Cog6ToothIcon,
@@ -29,7 +31,7 @@ import Updates from "./updates";
 import Settings from "./settings";
 import Profile from "./Profile";
 
-function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, advancedMode, toggleAdvancedMode, handleHistoryClick, handleDeleteHistory}) {
+function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, advancedMode, toggleAdvancedMode, handleHistoryClick, handleDeleteHistory, framework, setFramework }) {
   const [open, setOpen] = React.useState(0);
   const [dialogSize, setDialogSize] = React.useState(null);
   const [dialogContent, setDialogContent] = React.useState(null);
@@ -118,6 +120,18 @@ function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, ad
             </List>
           </AccordionBody>
         </Accordion>
+        <div className="framework-selector">
+          <Select 
+            label="Select Framework" 
+            value={framework} 
+            onChange={(value) => setFramework(value)}
+          >
+            <Option value="Regular CSS use flex grid etc">Regular CSS</Option>
+            <Option value="Bootstrap">Bootstrap</Option>
+            <Option value="Tailwind">Tailwind</Option>
+            {/* Add more options as needed */}
+          </Select>
+        </div>
         <hr className="my-2 border-blue-gray-50" />
         <ListItem onClick={handleLogout} color={`${darkMode ? 'white' : 'blue-gray'}`}>
               <ListItemPrefix>
@@ -139,7 +153,7 @@ function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, ad
                 {item.image && (
                   <div className={`mt-4 ${darkMode ? 'border-blue-gray-100' : ''}`} id="image-preview">
                     <img src={`data:image/png;base64,${item.image.image}`} alt="Uploaded" className={`w-20 h-7 object-cover mt-4 rounded-md ${darkMode ? 'text-blue-gray-100' : ''}`} />
-                    {console.log(`data:image/png;base64,${item.image.image}`)}
+                    {/* {console.log(`data:image/png;base64,${item.image.image}`)} */}
                   </div>
                 )}
               </ListItemPrefix>
@@ -166,6 +180,7 @@ function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, ad
           </div>
         )}
       </List>
+      
       <Dialog
         open={dialogSize !== null}
         size={dialogSize}

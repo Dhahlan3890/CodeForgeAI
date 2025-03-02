@@ -94,6 +94,9 @@ class AnalyzeView(APIView):
         if file.name == '':
             return Response({'msg': 'No selected file'}, status=status.HTTP_400_BAD_REQUEST)
 
+        framework = request.data.get('framework', 'Regular CSS use flex grid etc')  # Get framework from request
+        print(f"Framework received: {framework}")  # Debug statement
+
         try:
             with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.name)[1]) as temp_file:
                 for chunk in file.chunks():
@@ -101,7 +104,7 @@ class AnalyzeView(APIView):
                 image_path = temp_file.name
 
             # result = client.predict(image_path, api_name="/model_inference")
-            result = image_prompt(image_path)
+            result = image_prompt(image_path, framework)  # Pass framework to image_prompt
             result = extract_html_content(result)
             os.remove(image_path)
 
@@ -127,6 +130,8 @@ class AdvancedAnalyzeView(APIView):
         if file.name == '':
             return Response({'msg': 'No selected file'}, status=status.HTTP_400_BAD_REQUEST)
 
+        framework = request.data.get('framework', 'Regular CSS use flex grid etc')  # Get framework from request
+
         try:
             with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.name)[1]) as temp_file:
                 for chunk in file.chunks():
@@ -135,7 +140,7 @@ class AdvancedAnalyzeView(APIView):
 
             # client = Client("https://huggingfacem4-screenshot2html.hf.space/--replicas/xt2tt/", hf_token="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")
             # result = client.predict(image_path, api_name="/model_inference")
-            result = advanced_chat(image_path)
+            result = advanced_chat(image_path, framework)  # Pass framework to advanced_chat
             os.remove(image_path)
 
             # history = History.objects.create(

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SideBar from './SideBar';
 import Chat from './chat';
 import CodeTab from './tabs';
-import { IconButton, Drawer } from "@material-tailwind/react";
+import { IconButton, Drawer, Option } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 function ChatBot() {
@@ -13,6 +13,7 @@ function ChatBot() {
   const [darkMode, setDarkMode] = useState(false);
   const [advancedMode, setAdvancedMode] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [framework, setFramework] = useState("Regular CSS use flex grid etc");
   const openDrawer = () => setIsDrawerOpen(true);
   const closeDrawer = () => setIsDrawerOpen(false);
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -160,13 +161,41 @@ function ChatBot() {
           )}
         </IconButton>
         <Drawer open={isDrawerOpen} onClose={closeDrawer}>
-          <SideBar fetchChatHistory = {fetchChatHistory} history_store={history} darkMode={darkMode} toggleDarkMode={toggleDarkMode} advancedMode={advancedMode} toggleAdvancedMode={toggleAdvancedMode} handleHistoryClick={handleHistoryClick} handleDeleteHistory={handleDeleteHistory}/>
+          <SideBar 
+            fetchChatHistory={fetchChatHistory} 
+            history_store={history} 
+            darkMode={darkMode} 
+            toggleDarkMode={toggleDarkMode} 
+            advancedMode={advancedMode} 
+            toggleAdvancedMode={toggleAdvancedMode} 
+            handleHistoryClick={handleHistoryClick} 
+            handleDeleteHistory={handleDeleteHistory}
+            framework={framework} 
+            setFramework={setFramework} // Pass framework state and setter
+          />
         </Drawer>
       </div>
-      : <SideBar history_store={history} darkMode={darkMode} toggleDarkMode={toggleDarkMode} advancedMode={advancedMode} toggleAdvancedMode={toggleAdvancedMode} handleHistoryClick={handleHistoryClick} handleDeleteHistory={handleDeleteHistory}/>}
+      : <SideBar 
+          history_store={history} 
+          darkMode={darkMode} 
+          toggleDarkMode={toggleDarkMode} 
+          advancedMode={advancedMode} 
+          toggleAdvancedMode={toggleAdvancedMode} 
+          handleHistoryClick={handleHistoryClick} 
+          handleDeleteHistory={handleDeleteHistory}
+          framework={framework} 
+          setFramework={setFramework} // Pass framework state and setter
+        />}
       <div className='code-area'>
-        <Chat onSubmit={handleResult} onHistory={handleHistory} darkMode={darkMode} advancedMode={advancedMode} historyImagePreview={imagePreview}/>
-        <CodeTab result1={result} darkMode={darkMode}/>
+        <Chat 
+          onSubmit={handleResult} 
+          onHistory={handleHistory} 
+          darkMode={darkMode} 
+          advancedMode={advancedMode} 
+          historyImagePreview={imagePreview} 
+          framework={framework} 
+        />
+        <CodeTab result1={result} darkMode={darkMode} />
       </div>
     </div>
   );
