@@ -172,6 +172,7 @@ class ModifyAnalyzeView(APIView):
             return Response({'msg': 'No result input provided'}, status=status.HTTP_400_BAD_REQUEST)
         
         result_input = request.data['result']
+        framework = request.data.get('framework', 'Regular CSS use flex grid etc')  # Get framework from request
         
         try:
             # result = client1.predict(message=text_input,
@@ -179,7 +180,7 @@ class ModifyAnalyzeView(APIView):
             #                         param_3=True,
             #                         param_4=1024,
             #                         api_name="/chat")
-            result = modify_chat(text_input, result_input)
+            result = modify_chat(text_input, result_input, framework)
             
             # Extract the HTML content from the tuple result
             # if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], list) and len(result[1]) > 0 and isinstance(result[1][0], list) and len(result[1][0]) > 1:

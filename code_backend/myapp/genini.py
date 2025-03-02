@@ -14,7 +14,7 @@ load_dotenv()
 
 
 # Framework selection (e.g., Tailwind, Bootstrap, etc.)
-framework = "Regular CSS use flex grid etc"  # Change this to "Bootstrap" or any other framework as needed
+# framework = "Regular CSS use flex grid etc"  # Change this to "Bootstrap" or any other framework as needed
 
 def to_markdown(text):
   text = text.replace('•', '')
@@ -89,7 +89,7 @@ def advanced_chat(image_path, framework):
   return refined_html
 
 
-def modify_chat(description, text):
+def modify_chat(description, text, framework):
   chat_session1 = client.chats.create(model="gemini-2.0-flash")
   html_prompt = f"Validate the following HTML code based on the UI description and provide a refined version of the HTML code with {framework} CSS that improves accuracy, responsiveness, and adherence to the modified design. ONLY return the refined HTML code with inline CSS. Avoid using ```html. and ``` at the end. Here is the initial HTML: {text}. Here is the description of the UI elements: {description}"
   refined_html = chat_session1.send_message(html_prompt)
