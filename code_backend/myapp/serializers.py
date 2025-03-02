@@ -1,3 +1,4 @@
+import base64
 from rest_framework_simplejwt.tokens import Token
 from .models import User
 from django.contrib.auth.password_validation import validate_password
@@ -62,9 +63,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Image
         fields = '__all__'
+
+    def get_image(self, obj):
+        encoded_image = base64.b64encode(obj.image).decode('utf-8')
+        # print(f"Encoded image at serializer: {encoded_image[:50]}")  # Debug statement
+        return encoded_image
 
 class ChatHistorySerializer(serializers.ModelSerializer):
     image = ImageSerializer(required=False)

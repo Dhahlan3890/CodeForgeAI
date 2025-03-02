@@ -210,15 +210,11 @@ class ChatHistoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         image_data = self.request.data.get('image', None)
+        # print(f"Image data received: {image_data[:50]}")  # Debug statement
         if image_data:
-            image_serializer = ImageSerializer(data={'image': image_data})
-            if image_serializer.is_valid():
-                image_instance = image_serializer.save()
-                # image_instance = Image()
-                # image_instance.save_image_as_array(image_data)
-                serializer.save(user=self.request.user, image=image_instance)
-            else:
-                return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            image_instance = Image()
+            image_instance.save_image_as_array(image_data)
+            serializer.save(user=self.request.user, image=image_instance)
         else:
             serializer.save(user=self.request.user)
 
@@ -247,6 +243,6 @@ class ImageViewSet(viewsets.ModelViewSet):
 #         serializer.save(user=self.request.user)
 
 
-        
-        
+
+
 

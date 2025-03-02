@@ -118,7 +118,7 @@ function ChatBot() {
     console.log(`Clicked history item at index: ${index}`);
     console.log('History item:', history[index]);
     setResult(history[index].result);
-    setImagePreview(history[index].image.image);
+    setImagePreview(`data:image/png;base64,${history[index].image}`);
   };
 
   const handleDeleteHistory = (id) => {

@@ -138,7 +138,8 @@ function Sidebar({ fetchChatHistory, history_store, darkMode, toggleDarkMode, ad
                 {!item.image && <p>no image</p>}
                 {item.image && (
                   <div className={`mt-4 ${darkMode ? 'border-blue-gray-100' : ''}`} id="image-preview">
-                    <img src={item.image.image} alt="Uploaded" className={`w-20 h-7 object-cover mt-4 rounded-md ${darkMode ? 'text-blue-gray-100' : ''}`} />
+                    <img src={`data:image/png;base64,${item.image.image}`} alt="Uploaded" className={`w-20 h-7 object-cover mt-4 rounded-md ${darkMode ? 'text-blue-gray-100' : ''}`} />
+                    {console.log(`data:image/png;base64,${item.image.image}`)}
                   </div>
                 )}
               </ListItemPrefix>

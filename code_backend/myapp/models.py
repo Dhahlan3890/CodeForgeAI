@@ -3,6 +3,9 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db.models.signals import post_save
 import numpy as np
 from PIL import Image as PILImage
+import base64
+import io
+import binascii
 # Create your models here.
 
 class User(AbstractUser):
@@ -46,16 +49,34 @@ post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='images/')
+    image = models.BinaryField()
 
-    # image = models.BinaryField()
+    def save_image_as_array(self, image_data):
+        if isinstance(image_data, str) and image_data.startswith("data:"):
+            try:
+                # Extract the base64 portion of the data URL
+                header, encoded = image_data.split(",", 1)
+                self.image = base64.b64decode(encoded)
+            except (ValueError, binascii.Error) as e:
+                print(f"Error decoding base64 image data: {e}")
+                raise
+        else:
+            try:
+                # Handle file upload
+                pil_image = PILImage.open(image_data)
+                image_array = np.array(pil_image)
+                print(f"Image array shape: {image_array.shape}")
 
-    # def save_image_as_array(self, image):
-    #     pil_image = PILImage.open(image)
-    #     image_array = np.array(pil_image)
-    #     serialized_array = image_array.tobytes()
-    #     self.image = serialized_array
-    #     self.save()
+                # Convert the image to bytes (e.g., in PNG format)
+                with io.BytesIO() as output:
+                    pil_image.save(output, format="PNG")
+                    self.image = output.getvalue()
+            except Exception as e:
+                print(f"Error processing image file: {e}")
+                raise
+
+        # Save the image to the database
+        self.save()
 
 class ChatHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
